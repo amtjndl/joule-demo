@@ -1,33 +1,33 @@
+"use client";
+import { useState } from "react";
+import Dashboard from "./screens/Dashboard";
+import PaymentCenter from "./screens/PaymentCenter";
+import InvestigationView from "./screens/InvestigationView";
+import TimelineView from "./screens/TimelineView";
+export type ScreenState =
+  | "HOME"
+  | "PAYMENT_CENTER"
+  | "INVESTIGATION"
+  | "TIMELINE";
 export default function AnalysisPanel() {
+  const [screen, setScreen] = useState<ScreenState>("HOME");
+  const [selectedFile, setSelectedFile] = useState<any>(null);
+  const handleNavigate = (target: ScreenState, payload?: any) => {
+    if (payload) setSelectedFile(payload);
+    setScreen(target);
+  };
   return (
     <div className="space-y-6">
-      {/* Section Header */}
-      <div>
-        <h2 className="text-2xl font-semibold">Executive Insights</h2>
-        <p className="text-joule-subtle text-sm mt-1">
-          Data-driven highlights generated from your conversation
-        </p>
-      </div>
-      {/* Card 1 */}
-      <div className="p-6 bg-white rounded-xl shadow border border-joule-border">
-        <h3 className="text-lg font-semibold mb-4">Key Metrics Overview</h3>
-        <svg width="100%" height="140">
-          <polyline
-            fill="none"
-            stroke="#3a7bd5"
-            strokeWidth="3"
-            points="0,80 40,60 80,70 120,45 160,55 200,35 240,50 280,20"
-          />
-        </svg>
-      </div>
-      {/* Card 2 */}
-      <div className="p-6 bg-white rounded-xl shadow border border-joule-border">
-        <h3 className="text-lg font-semibold mb-3">Insights Summary</h3>
-        <p className="text-joule-subtle text-sm leading-relaxed">
-          This section provides executive-level summaries, detected patterns,
-          and recommended actions based on your dialogue with the assistant.
-        </p>
-      </div>
+      {screen === "HOME" && <Dashboard onNavigate={handleNavigate} />}
+      {screen === "PAYMENT_CENTER" && (
+        <PaymentCenter onNavigate={handleNavigate} />
+      )}
+      {screen === "INVESTIGATION" && (
+        <InvestigationView file={selectedFile} onNavigate={handleNavigate} />
+      )}
+      {screen === "TIMELINE" && (
+        <TimelineView file={selectedFile} onNavigate={handleNavigate} />
+      )}
     </div>
   );
 }
